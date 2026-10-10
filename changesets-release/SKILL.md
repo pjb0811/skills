@@ -45,7 +45,7 @@ gh run list --branch main --limit 3
 
 ## 4. `action_required`로 멈춘 실행 승인
 
-필수 상태 체크는 보통 `lint-and-build (Node v24.x)`와 `draft`다(`gh api repos/<owner>/<repo>/rulesets`로 확인).
+필수 상태 체크는 보통 `lint-and-build`와 `draft`다(`gh api repos/<owner>/<repo>/rulesets`로 확인).
 
 changeset-draft 봇이 PR 브랜치에 커밋을 push하면 `synchronize`로 CI와 Changeset Draft가 다시 도는데, 이 실행이 **`conclusion: action_required`, job 0개**로 멈출 때가 있다. 문제 있는 실행이 아니라 승인을 기다리는 상태다. 필수 체크가 끝나지 않으니 `mergeStateStatus`가 `BLOCKED`로 남는다.
 
