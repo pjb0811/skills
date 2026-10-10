@@ -115,7 +115,9 @@ gh label list
 
 `Acceptance criteria`(버그와 기능 모두)는 오픈소스 이슈 템플릿에는 드물다. 이슈를 다른 사람이나 에이전트가 이어받아 작업할 때 완료 조건을 분명히 하려고 넣는 선택 섹션이다.
 
-리팩터링, 문서, 작업성 이슈는 `Problem` 대신 `Context`로 바꾸고, 같은 흐름(배경 → 할 일 → 완료 조건)으로 쓴다.
+리팩터링, 문서, 작업성 이슈는 `Problem` 대신 `Context`로 바꾸고, 같은 흐름(배경 → 할 일 → 완료 조건)으로 쓴다. 할 일이 배경만으로 분명하면(예: 범위가 정해진 주석 정리) `Context`와 `Acceptance criteria`만 써도 된다.
+
+이슈를 쓰기 전에 직접 시도해 본 결과나 결정이 필요한 쟁점이 있으면, `Context`와 `Proposed solution` 사이에 내용을 나타내는 제목의 섹션을 둔다(예: `## Trial upgrade`, `## The release question`). 기본 섹션 이름은 바꾸지 않는다.
 
 ## 6. 작성 규칙
 

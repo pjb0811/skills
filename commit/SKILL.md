@@ -1,6 +1,6 @@
 ---
 name: commit
-description: "Analyze the currently staged git changes and draft a commit message in conventional-commit style (`type(scope): summary` title, then Korean or English `-` bullets), get user approval, then run the actual git commit — with no gitmoji prefix and no Co-Authored-By trailer. Defaults to English; pass 'ko' to write in Korean. Every repository uses this one global skill; a repository's written convention (e.g. `.github/COMMIT_CONVENTION.md`) is read and kept in line with it. Use when the user says '커밋해줘', '/commit', 'commit this', 'write a commit message and commit'."
+description: "Analyze the currently staged git changes and draft a commit message in conventional-commit style (`type(scope): summary` title, `!` after the type or scope for a breaking change, then Korean or English `-` bullets), get user approval, then run the actual git commit — with no gitmoji prefix and no Co-Authored-By trailer. Defaults to English; pass 'ko' to write in Korean. Every repository uses this one global skill; a repository's written convention (e.g. `.github/COMMIT_CONVENTION.md`) is read and kept in line with it. Use when the user says '커밋해줘', '/commit', 'commit this', 'write a commit message and commit'."
 ---
 
 # Commit
@@ -62,6 +62,8 @@ git diff --cached
 ```
 
 제목에 gitmoji(이모지)를 붙이지 않는다 — `type(scope): 요약`으로 시작한다.
+
+호환성을 깨는 변경(공개 API 제거나 이름 변경, 지원 범위 축소 등)은 타입(스코프가 있으면 스코프) 뒤에 `!`를 붙인다: `refactor(api)!: remove the exports deprecated in 4.x`, `chore(deps)!: require Node 22.18`. 본문 불릿에는 무엇이 깨지는지와 대체 방법을 쓴다. PR 제목도 같은 규칙을 따른다(`pr` 스킬).
 
 요약과 세부 변경사항의 언어는 지정된 언어 옵션(`ko`/`en`, 기본값 `en`)을 따른다.
 
