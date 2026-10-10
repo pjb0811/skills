@@ -7,6 +7,8 @@ description: "Pre-release checklist for an npm package released through changese
 
 changesets로 릴리스하는 npm 패키지를 배포 전에 점검한다. 릴리스 흐름 자체(changeset → Version Packages PR → `publish.yml`)는 `changesets-release` 스킬을 따른다. 저장소에 `version-management` 스킬이 있으면 패키지 경로나 추가 점검 항목을 거기서 확인한다.
 
+저장소의 `version-management`가 이 스킬에 넘길 값을 따로 정하면 그것을 따른다(예: ui-kit은 워크스페이스 이름 `@repo/ui`와 npm 이름 `@jbpark/ui-kit`이 다르고, 배포되는 `exports`가 `package.publish.json`에 있다).
+
 명령은 **배포 대상 패키지 디렉터리**에서 실행한다. 단일 패키지 저장소면 루트, 모노레포면 `private: false`인 패키지(예: ui-kit의 `packages/ui`)다. 각 단계가 실패하면 내용을 보고하고 멈춘다.
 
 ## 1. 배포 여부 확인
