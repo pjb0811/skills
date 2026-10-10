@@ -18,8 +18,12 @@ description: "Draft a pull request title and body from the branch's final diff, 
 ```bash
 git status --short
 git branch --show-current
-git log --oneline origin/HEAD..HEAD
+base=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
+git fetch origin "$base"
+git log --oneline "origin/$base..HEAD"
 ```
+
+`origin/HEAD`는 clone 방식에 따라 설정돼 있지 않을 수 있어서 기본 브랜치를 `gh`로 읽는다.
 
 - 기본 브랜치(`main` 등)에 있으면 멈추고 작업 브랜치를 만들지 묻는다.
 - 커밋되지 않은 변경이 있으면 PR에 들어갈 것인지 확인한다. 범위를 임의로 넓혀 `git add -A`/`git add .`를 쓰지 않는다.
@@ -32,9 +36,10 @@ git log --oneline origin/HEAD..HEAD
 1. **PR 템플릿**: `.github/pull_request_template.md`, `.github/PULL_REQUEST_TEMPLATE/`, `docs/` 아래 템플릿 등.
 2. **최근 머지된 PR 약 5개**:
    ```bash
-   gh pr list --state merged --limit 5 --json number,title,body,url,mergedAt
+   gh pr list --state merged --limit 15 --json number,title,body,url,mergedAt,author \
+     -q '[.[] | select(.author.is_bot | not) | select(.title | test("^chore: version packages") | not)][:5]'
    ```
-   분량과 자세함의 수준, 템플릿 체크박스를 실제로 어떻게 채우는지를 본다. 최근 PR의 섹션 이름이 기본 구성과 달라도 그 이름은 따르지 않는다(예전 형식일 수 있다). 5개보다 적으면 있는 만큼 쓴다. 원격 기록을 못 읽으면 템플릿과 로컬 근거만으로 쓰고, 예시를 지어내지 않는다.
+   봇이 만든 PR(Version Packages, Renovate 등)은 사람이 쓴 본문이 아니므로 뺀다. 분량과 자세함의 수준, 템플릿 체크박스를 실제로 어떻게 채우는지를 본다. 최근 PR의 섹션 이름이 기본 구성과 달라도 그 이름은 따르지 않는다(예전 형식일 수 있다). 5개보다 적으면 있는 만큼 쓴다. 원격 기록을 못 읽으면 템플릿과 로컬 근거만으로 쓰고, 예시를 지어내지 않는다.
 3. **저장소 지침**: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`의 PR·언어·changeset 규칙.
 4. **최종 변경 내용**: `git diff <base>...HEAD --stat`, `git diff <base>...HEAD`, 관련 이슈 본문(`gh issue view <n>`), 실제로 돌린 검증 결과.
 
@@ -43,6 +48,7 @@ git log --oneline origin/HEAD..HEAD
 ## 3. 제목
 
 - 커밋 컨벤션과 같은 `type(scope): summary` 형식이다. gitmoji는 붙이지 않는다.
+- 호환성을 깨는 변경(공개 API 제거, 지원 범위 축소 등)은 타입 뒤에 `!`를 붙인다(`refactor(api)!: …`, `chore(deps)!: …`).
 - 커밋이 하나면 보통 그 커밋 제목과 같다. 여러 개면 전체를 대표하는 한 줄로 쓴다.
 - 영어 명령문, 소문자 시작, 마침표 없음.
 
@@ -50,7 +56,12 @@ git log --oneline origin/HEAD..HEAD
 
 **섹션 구성**: 아래 기본 구성을 쓴다. 저장소 템플릿이 있으면 기본 구성 뒤에 템플릿 고유의 섹션(체크박스, Breaking Changes 등)을 붙인다. 템플릿이 기본 구성과 다른 섹션 이름(예: Validation, What was wrong)을 쓰고 있으면, 기본 구성 이름으로 쓰고 템플릿을 맞추자고 사용자에게 제안한다.
 
-템플릿에 체크박스 섹션(Type of Change, Scope 등)이 있으면 남기고, 해당하는 항목만 체크한다. 하지 않은 일은 체크하지 않는다. 해당 없는 항목은 지워도 된다.
+템플릿 체크박스는 목록의 성격에 따라 다르게 다룬다.
+
+- **검증 목록**(How to test의 검사 항목, Checklist): 항목을 모두 남기고, 실제로 한 것만 체크한다. 체크되지 않은 항목이 하지 않은 일을 그대로 보여 준다.
+- **선택 목록**(Type of Change, Scope 등): 해당하는 항목만 체크해서 남기고 나머지 줄은 지운다.
+- 해당 없는 선택 섹션(UI 변경이 없을 때의 Screenshots / Demo 등)은 섹션째 지운다.
+- 템플릿의 안내 주석(`<!-- … -->`)은 지운다.
 
 기본 구성. Google의 CL 설명 가이드와 React, Next.js, Kubernetes, Angular의 PR 템플릿에서 공통으로 쓰는 구성이다.
 
@@ -79,9 +90,12 @@ Closes #123.
 - **첫 줄과 Summary**: 나중에 이 PR을 검색해서 읽을 사람이 무엇을 왜 했는지 바로 알 수 있게 쓴다. "Fix bug", "Phase 1"처럼 막연한 요약은 쓰지 않는다.
 - **이슈 연결**: 이 PR로 이슈가 실제로 해결될 때만 `Closes #N`을 쓴다(Summary 안이나 바로 아래). 일부만 다루면 `Part of #N`으로 쓰고 남은 범위를 적는다. 다른 저장소 이슈는 `owner/repo#N`으로 쓴다.
 - **Summary의 근거**: 가능한 한 구체적으로 쓴다. 재현한 입력과 결과, 측정값, 수정 전 코드에서 실패하는 테스트 등이다. 짐작은 짐작이라고 쓴다.
-- **Changes**: 파일 나열이 아니라 동작 단위로 쓴다. 바뀌지 않은 동작은 범위를 정하거나 사용자에게 영향이 있을 때만 쓴다.
-- **How to test**: 단위 테스트(무엇을 확인하는지, 수정 전에는 실패하는지), 전체 테스트/lint/타입/빌드 결과, 브라우저나 Storybook 확인을 쓴다. **확인하지 못한 것은 확인하지 못했다고 쓴다.**
-- **Notes for reviewers**: 리뷰어가 판단하는 데 필요한 것만 쓴다. 비어 있으면 섹션째 뺀다.
+- **Changes**: 파일 나열이 아니라 동작 단위로 쓴다. 바뀌지 않은 동작은 범위를 정하거나 사용자에게 영향이 있을 때만 쓴다. 변경이 많으면 굵은 글씨 머리말(`**Docs.**`, `**Tests.**`)로 묶는다. 릴리스를 관리하는 저장소(changesets 등)면 마지막 항목에 릴리스 영향을 쓴다(`Changeset: major`, `Adds a patch changeset`, `An empty changeset, since nothing changes for users`).
+- **How to test**: 단위 테스트(무엇을 확인하는지, 수정 전에는 실패하는지), 전체 테스트/lint/타입/빌드 결과, 브라우저나 Storybook 확인을 쓴다. **확인하지 못한 것은 확인하지 못했다고 쓴다.** 템플릿에 검사 체크박스가 있으면 이렇게 쓴다:
+  1. 템플릿 체크박스에 실제로 돌린 것만 체크한다.
+  2. 템플릿에 없는 검사는 그 아래 `Also ran, all passing:` 목록에 결과 수치와 함께 쓴다(`pnpm test` (960)). 실패가 있었으면 "all passing"이라고 쓰지 않는다.
+  3. 하지 않은 검사는 `Not run:` 한 줄에 쓰고, 이유가 리뷰에 필요하면 함께 쓴다.
+- **Notes for reviewers**: 리뷰어가 판단하는 데 필요한 것만 쓴다. 다른 PR과의 머지 순서나 의존 관계, 머지했을 때의 릴리스 영향(예: major changeset이 main에 들어가 다음 릴리스가 메이저가 됨)이 있으면 여기에 쓴다. 비어 있으면 섹션째 뺀다.
 - 화면이 바뀌면 스크린샷이나 데모 섹션을 추가하거나(템플릿에 있으면 그 섹션), 못 붙였다는 사실을 적는다.
 
 ## 5. 작성 규칙

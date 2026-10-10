@@ -1,6 +1,6 @@
 ---
 name: issue
-description: "Draft and file a GitHub issue with `gh`: check for duplicates, follow the repository's issue template and recent issues, verify the facts against the code, then write an English body shaped by type (bug: description / steps to reproduce / expected / actual / environment; feature: problem / proposed solution / alternatives). Separates confirmed facts from guesses and carries no AI attribution footer. Every repository uses this one global skill; repository differences live only in its templates. Use when the user says '이슈 등록해줘', '이슈 만들어줘', '이슈로 남겨줘', '/issue', 'file an issue', 'open an issue'."
+description: "Draft and file a GitHub issue with `gh`: check for duplicates, follow the repository's issue template and recent issues, verify the facts against the code, then write an English body shaped by type (bug: description / steps to reproduce / expected / actual / environment, plus where / suggested fix / acceptance criteria once the cause is known; feature: problem / proposed solution / alternatives). Separates confirmed facts from guesses and carries no AI attribution footer. Every repository uses this one global skill; repository differences live only in its templates. Use when the user says '이슈 등록해줘', '이슈 만들어줘', '이슈로 남겨줘', '/issue', 'file an issue', 'open an issue'."
 ---
 
 # Issue
@@ -13,7 +13,7 @@ GitHub 이슈를 작성하고 `gh`로 등록한다. 이슈는 나중에 이 대�
 
 ## 1. 어느 저장소에 등록할지
 
-- 문제가 실제로 고쳐질 곳에 등록한다. 공유 UI나 훅 문제는 쓰는 쪽 앱이 아니라 `ui-kit`/`use-hooks` 같은 라이브러리 저장소에 낸다.
+- 문제가 실제로 고쳐질 곳에 등록한다. 공유 라이브러리의 문제는 쓰는 쪽 앱이 아니라 라이브러리 저장소에 낸다(pjb0811 저장소에서는 UI는 `ui-kit`, 훅은 `use-hooks`. `shared-library-first` 스킬 참고).
 - 대상 저장소가 현재 디렉터리와 다르면 `gh ... --repo owner/repo`로 지정한다.
 
 ## 2. 참고 자료와 중복 확인
@@ -70,10 +70,24 @@ gh label list
 
 <!-- 버전/커밋, 브라우저, OS 등 재현에 영향이 있는 것만. -->
 
+## Where
+
+<!-- 선택: 원인이 되는 코드 위치(`path:line`, 기준 커밋)와 왜 그렇게 동작하는지. 확인한 것과 추정을 구분한다. -->
+
+## Suggested fix
+
+<!-- 선택: 고치는 방향, 지켜야 할 기존 동작, 검토했다 버린 대안. 직접 적용해 확인했으면 그 결과. -->
+
 ## Additional context
 
-<!-- 선택: 추정 원인(추정이라고 명시), 관련 이슈/PR, 우회 방법. -->
+<!-- 선택: 관련 이슈/PR, 우회 방법, 범위에서 뺀 것, 확인해 보니 문제가 아니었던 것. -->
+
+## Acceptance criteria
+
+- <!-- 선택: 추가할 테스트 케이스(입력 → 기대 결과)와 계속 통과해야 하는 기존 테스트. -->
 ```
+
+원인 코드를 확인했으면 `Where`와 `Suggested fix`를 쓴다. 이슈를 이어받는 사람이 다시 조사하지 않아도 되게 하려는 섹션이다.
 
 **기능 / 개선**
 
@@ -99,7 +113,7 @@ gh label list
 - <!-- 선택: 끝났다고 판단할 수 있는 확인 항목. 테스트로 옮길 수 있게 구체적으로. -->
 ```
 
-`Acceptance criteria`는 오픈소스 이슈 템플릿에는 드물다. 이슈를 다른 사람이나 에이전트가 이어받아 작업할 때 완료 조건을 분명히 하려고 넣는 선택 섹션이다.
+`Acceptance criteria`(버그와 기능 모두)는 오픈소스 이슈 템플릿에는 드물다. 이슈를 다른 사람이나 에이전트가 이어받아 작업할 때 완료 조건을 분명히 하려고 넣는 선택 섹션이다.
 
 리팩터링, 문서, 작업성 이슈는 `Problem` 대신 `Context`로 바꾸고, 같은 흐름(배경 → 할 일 → 완료 조건)으로 쓴다.
 
@@ -111,6 +125,7 @@ gh label list
 - 코드 위치는 `path:line`으로 쓰고, 줄 번호가 바뀔 수 있으면 기준 커밋을 함께 적는다.
 - 대화 경위는 쓰지 않는다. 이 대화에서 처음 나온 사실이면, 왜 문제인지를 이슈 안에서 설명한다.
 - 비공개 정보(토큰, 개인 데이터, 내부 URL)는 넣지 않는다.
+- 템플릿의 안내 주석(`<!-- … -->`)은 지운다.
 - `🤖 Generated with ...` 같은 AI 표기 문구나 생성 도구 표기를 넣지 않는다.
 
 ## 7. 확인
