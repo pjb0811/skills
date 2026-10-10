@@ -12,9 +12,10 @@ Personal [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills
 | [`ref-verification`](ref-verification/SKILL.md) | Reading repository state from git refs instead of a possibly stale worktree |
 | [`coding-style`](coding-style/SKILL.md) | Following a repository's conventions, bulk renames, comments, boolean names, braces, subcomponent file layout |
 | [`changesets-release`](changesets-release/SKILL.md) | The changesets release flow, npm publish checks, approving `action_required` runs |
+| [`publish-check`](publish-check/SKILL.md) | Pre-release checks for an npm package: publish status, type check, build, version, `exports` vs entries |
 | [`shared-library-first`](shared-library-first/SKILL.md) | Building reusable UI in `ui-kit` and hooks in `use-hooks` before using them in an app |
 
-Repository-specific skills stay in their repositories, for example `version-management` (package path, npm publish status), `component-naming` audits in `ui-kit`, `ast` in `live-editor` and `add-hook` in `use-hooks`.
+Repository-specific skills stay in their repositories, for example `version-management` (package path, npm publish status), `component-naming` audits and the `new-component` / `new-story` commands in `ui-kit`, `ast` in `live-editor` and `add-hook` in `use-hooks`.
 
 ## Install
 
