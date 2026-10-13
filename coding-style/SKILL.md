@@ -1,11 +1,13 @@
 ---
 name: coding-style
-description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast. Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
+description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`). Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
 ---
 
 # Coding Style
 
 저장소 전반에서 일관된 방식으로 코드를 다루기 위한 절차 모음. 여러 개의 독립된 하위 절차로 구성되며, 새로운 상황이 생기면 이 파일에 섹션을 추가해서 계속 확장한다.
+
+> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
 
 - **A. 기존 컨벤션 파악하고 따르기** — 코드를 작성/수정하기 전에 항상 먼저 확인
 - **B. 네이밍 컨벤션 일괄 변경** — 디렉토리/파일명 케이스 컨벤션을 바꿔야 할 때
@@ -13,6 +15,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 - **D. boolean 이름 짓기** — boolean 값·상태·prop·판별 함수의 이름을 정할 때
 - **E. 조건문은 항상 중괄호 블록으로** — `if`/`else`를 새로 쓰거나 고칠 때
 - **F. 서브컴포넌트가 있는 컴포넌트의 파일 구조** — 서브컴포넌트를 가진 컴포넌트를 만들거나 정리할 때
+- **G. 문장 덩어리 사이 빈 줄** — 함수·블록 안에 문장을 새로 쓰거나 고칠 때
 
 ---
 
@@ -24,7 +27,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 
 작업 대상 저장소 루트(또는 서브패키지 루트)에서 아래를 순서대로 확인한다:
 
-- `CLAUDE.md`, `AGENTS.md` — 있으면 최우선 소스. 명시적으로 작성된 규칙이므로 그대로 따른다.
+- `CLAUDE.md`, `AGENTS.md` — 있으면 최우선 소스. 명시적으로 작성된 규칙이므로 그대로 따른다. 단, 실제 코드와 어긋나면 낡은 것이므로 A4 를 따른다.
 - `README.md` / `CONTRIBUTING.md`의 "Development" / "코딩 컨벤션" 관련 섹션
 - `docs/` 하위의 스타일 가이드 (`STYLE_GUIDE.md`, `CONVENTIONS.md` 등)
 - `.cursor/rules`, `.windsurfrules` 같은 다른 AI 툴용 규칙 파일 (있다면 이 프로젝트에 실제로 통용되는 규칙일 가능성이 높음)
@@ -36,6 +39,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 문서에 없는 세부 규칙(따옴표, 세미콜론, 들여쓰기, trailing comma 등)은 추측하지 말고 설정 파일에서 확인한다:
 
 - `.prettierrc*`, `.editorconfig`, `eslint.config.*`/`.eslintrc*`
+- 단, **중괄호(`curly`)·빈 줄(`padding-line-between-statements`, `newline-before-return`)은 ESLint 설정만 근거로 본다.** Prettier 는 이 항목을 강제하지 않으므로(중괄호를 넣지 않고, 빈 줄은 보존만 한다) Prettier 설정만 있으면 "설정 없음"이다.
 - `package.json`의 `prettier`/`eslint` 필드
 
 ### A3. 이웃 파일로 패턴 추론
@@ -54,7 +58,9 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 4. 이웃 파일에서 관찰한 실제 패턴
 5. (위 어느 것도 없을 때만) 언어/프레임워크의 일반적인 관용 스타일 — 이 경우 어떤 근거로 그 스타일을 골랐는지 짧게 언급한다
 
-문서와 실제 코드가 서로 다르면(문서가 오래됨) 실제 코드 쪽을 따르고, 문서가 낡았다는 점을 사용자에게 짚어준다.
+문서와 실제 코드가 서로 다르면(문서가 오래됨) 실제 코드 쪽을 따르고, 문서가 낡았다는 점을 근거(`path:line`, 설치 버전, `git log` 날짜)와 함께 사용자에게 짚어준다. 코드 컨벤션뿐 아니라 저장소에 커밋된 라이브러리 사용법 스킬(설치 버전과 대조)·경로·절차에도 같은 기준을 적용한다. "오래돼 보인다"는 인상만으로 문서를 무시하지 않고, 요청 없이 문서를 고치지 않는다. 대조 기준은 전역 지침의 "저장소 문서·스킬이 낡았을 때"에 있다.
+
+**예외 — 중괄호와 빈 줄:** 저장소 ESLint 설정이나 스타일 문서가 정하지 않았으면 4번(이웃 파일)보다 **섹션 E·G 의 기본값이 우선**한다. 이웃 파일이 `if (!el) return;` 처럼 중괄호를 생략하고 있어도 새로 쓰거나 고친 코드에는 중괄호를 넣는다. 저장소가 그 룰을 끄도록 명시했으면(`'curly': 'off'` 등) 저장소 결정을 따른다. 손대지 않은 주변 코드는 스타일만 이유로 고치지 않는다.
 
 ### A5. 적용
 
@@ -74,7 +80,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 
 ### B0. 사전 확인
 
-- **무엇을 바꾸는지 범위를 명확히 한다**: 디렉토리명만 바꾸는지, 파일명도 포함하는지. 보통 컴포넌트/모듈은 `{new-name}/index.ts` 구조라 파일명(`index.ts`)은 안 바뀌고 디렉토리명만 바뀐다.
+- **무엇을 바꾸는지 범위를 명확히 한다**: 디렉토리명만 바꾸는지, 파일명도 포함하는지. 기존 코드가 `{name}/index.ts` 구조라면 파일명(`index.ts`)은 안 바뀌고 디렉토리명만 바뀐다. 폴더명과 같은 이름의 파일(`{name}/{name}.tsx`)이면 파일명도 함께 바꾼다.
 - **export/식별자 이름은 그대로 둔다**: 폴더명 변경과 그 폴더가 export하는 JS/TS 식별자(컴포넌트명, 함수명 등)는 별개다. 바꾸는 대상은 **경로 문자열**뿐이지 `export default Foo`의 `Foo` 자체가 아니다 (다른 케이스 컨벤션 규칙이 명시적으로 있지 않는 한).
 - **public API 표면 확인**: `package.json`의 `exports` 필드처럼 외부에 노출된 subpath가 있다면, 그 키(`"./Foo"`)까지 바꾸면 breaking change가 된다. 내부 경로 값만 바꾸고 키는 유지할지, 아니면 키까지 포함해 의도적으로 breaking change를 낼지 사용자에게 확인한다.
 
@@ -197,7 +203,7 @@ const value = _value === undefined ? code : _value;
 
 - **우회 코드(workaround)**: 외부 라이브러리 버그 때문에 이상해 보이는 코드는 이유를 남긴다. 다만 "무엇을 우회하는지"와 "없애도 되는 조건"을 현재형으로 쓰고, 발견 경위는 이슈로 보낸다.
 - **이슈 번호가 없는 과거 이야기**: 이야기를 지우고 제약만 남긴다. 제약도 없다면 주석을 지운다.
-- **저장소 언어**: 주석 언어는 저장소 관례를 따른다(pjb0811 저장소들은 영어). 한국어 설명이 필요하면 코드가 아니라 문서(README.ko.md, live-editor의 `ARCHITECTURE.ko.md` 등)에 둔다.
+- **저장소 언어**: 주석 언어는 저장소 관례(기존 주석)를 따른다. 판단할 주석이 없으면 영어로 쓴다(pjb0811 저장소들은 영어). 한국어 설명이 필요하면 코드가 아니라 문서(README.ko.md, live-editor의 `ARCHITECTURE.ko.md` 등)에 둔다. 한국어 주석을 쓰는 저장소에도 C1의 규칙을 같은 취지로 적용한다("예전에는", "이제는" 같은 과거 이야기 표현 금지).
 
 ---
 
@@ -261,7 +267,7 @@ boolean은 쓰이는 자리에 따라 이름 짓는 방식이 다르다. React �
 
 ## F. 서브컴포넌트가 있는 컴포넌트의 파일 구조
 
-`Checkbox.Group`, `Error.Boundary`처럼 서브컴포넌트를 갖는 컴포넌트는 중첩 폴더가 아니라 **같은 depth의 형제 파일**로 두고, `index.ts`는 로직 없는 **순수 배럴**로 둔다. pjb0811/ui-kit에서 정해서(2026-07-18) live-editor 전체에 적용했고, use-hooks와 pjb0811.github.io는 서브컴포넌트가 처음 필요해질 때 이 구조를 따른다. 저장소에 다른 규칙이 문서로 있으면 그쪽을 따른다(섹션 A).
+`Checkbox.Group`, `Error.Boundary`처럼 서브컴포넌트를 갖는 컴포넌트는 중첩 폴더가 아니라 **같은 depth의 형제 파일**로 두고, `index.ts`는 로직 없는 **순수 배럴**로 둔다. pjb0811/ui-kit에서 정해서(2026-07-18) live-editor 전체에 적용했고, use-hooks와 pjb0811.github.io는 서브컴포넌트가 처음 필요해질 때 이 구조를 따른다. 이 적용 현황은 환경 사실이라 낡는다 — 작업 전에 대상 저장소의 기존 서브컴포넌트 폴더를 보고 지금 상태를 확인한다(섹션 A3). 저장소에 다른 규칙이 문서로 있으면 그쪽을 따른다(섹션 A).
 
 ### F1. 구조
 
@@ -322,3 +328,40 @@ export type { Props };
 - **JSX가 없는 하위 모듈**(`createContext`만 있는 파일 등)은 확장자를 `.ts`로 바꿔도 된다.
 - **`.astro` 컴포넌트**는 배럴 재export 문법이 달라서 F2 패턴을 그대로 쓰지 않는다. `.tsx`/`.ts` 컴포넌트에만 적용한다.
 - **기존 코드를 소급해서 일괄 변경하지 않는다.** 범위(컴포넌트 하나인지 전체 재정렬인지)를 사용자에게 확인한 뒤 F3를 따른다.
+
+---
+
+## G. 문장 덩어리 사이 빈 줄
+
+사용자가 정한 개인 전역 규칙(ESLint `padding-line-between-statements`, `newline-before-return` 에 해당): 의미가 바뀌는 경계에 빈 줄을 넣어 덩어리를 끊는다. 섹션 E 와 마찬가지로 A4의 "이웃 파일 우선"보다 우선한다.
+
+### G1. 빈 줄을 넣는 경계
+
+- 선언·계산 → 그 값을 쓰는 코드
+- 연속된 가드절 사이
+- 블록 안의 부수효과(로그 등) → `return`
+- `return` 문 앞 (블록의 첫 문장이면 제외)
+
+```ts
+// 지양
+const handler = handlers[eventName];
+if (typeof handler !== 'function') {
+  console.warn(`No handler for "${eventName}"`);
+  return;
+}
+
+// 지향
+const handler = handlers[eventName];
+
+if (typeof handler !== 'function') {
+  console.warn(`No handler for "${eventName}"`);
+
+  return;
+}
+```
+
+### G2. 지킬 것
+
+- 빈 줄은 1줄만 쓴다(2줄 이상은 Prettier 가 압축한다).
+- **한 덩어리로 읽히는 문장들은 붙여 둔다.** 모든 문장 사이에 빈 줄을 넣으면 경계 표시가 의미를 잃는다.
+- 적용 범위는 섹션 E 와 같다. 새로 쓰거나 고친 코드에만 적용하고, 손대지 않은 주변 코드는 이 규칙 때문에 diff 를 넓히지 않는다. 저장소 린트 설정과 충돌하면 저장소 설정을 따르고 사용자에게 알린다.

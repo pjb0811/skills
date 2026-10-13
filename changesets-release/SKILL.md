@@ -18,9 +18,11 @@ ls .github/workflows/                 # publish.yml 유무
 npm view <package-name> version       # 레지스트리에 실제로 있는지
 ```
 
-모노레포면 배포 대상 패키지의 `package.json`(예: ui-kit은 `packages/ui/package.json`)을 본다. 확인 결과가 저장소 문서와 다르면 **문서를 고친다.**
+모노레포면 배포 대상 패키지의 `package.json`(예: ui-kit은 `packages/ui/package.json`)을 본다. 확인 결과가 저장소 문서와 다르면 실제 상태를 따르고, 문서가 낡았다는 사실을 근거(확인한 ref, 명령 출력)와 함께 사용자에게 보고한다. 문서를 고치는 것은 사용자가 요청할 때만 한다.
 
 ## 2. 릴리스 흐름
+
+> 아래 워크플로·스크립트 이름과 동작은 환경 사실이다(환경 의존, 2026-10 확인: live-editor·ui-kit·use-hooks·pjb0811.github.io 의 `origin/main`). 다시 확인할 때는 `git ls-tree --name-only origin/main .github/workflows/ .github/scripts/` 로 파일을 보고, 동작은 해당 워크플로 파일을 읽는다. 여기 적힌 것과 다르면 실제 파일을 따르고 이 스킬이 낡았다고 보고한다.
 
 1. **changeset 추가**: 사용자에게 보이는 변경이 있는 PR에는 `.changeset/*.md`가 필요하다. `changeset` CLI로 직접 만들거나, `changeset-draft.yml`(필수 상태 체크 `draft`)이 PR마다 초안을 만들고 갱신한다.
    - 봇 초안은 **최대 `minor`까지만** 쓴다(`.github/scripts/draft-bump.mjs`). 모델이 `major`를 고르면 `minor`로 낮추고 봇 커밋 메시지 끝에 `(model suggested major; capped at minor)`를 붙인다. 정말 호환성을 깨는 변경이면 사람이 초안을 `major`로 고친다(pjb0811/live-editor#457).
@@ -45,7 +47,7 @@ gh run list --branch main --limit 3
 
 ## 4. `action_required`로 멈춘 실행 승인
 
-필수 상태 체크는 보통 `lint-and-build`와 `draft`다(`gh api repos/<owner>/<repo>/rulesets`로 확인).
+필수 상태 체크는 보통 `lint-and-build`와 `draft`다(환경 의존, 2026-10 확인. 지금 값은 `gh api repos/<owner>/<repo>/rulesets` 로 확인한다).
 
 changeset-draft 봇이 PR 브랜치에 커밋을 push하면 `synchronize`로 CI와 Changeset Draft가 다시 도는데, 이 실행이 **`conclusion: action_required`, job 0개**로 멈출 때가 있다. 문제 있는 실행이 아니라 승인을 기다리는 상태다. 필수 체크가 끝나지 않으니 `mergeStateStatus`가 `BLOCKED`로 남는다.
 
