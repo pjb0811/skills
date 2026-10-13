@@ -93,6 +93,13 @@ git diff --cached
 
 ## 7. 커밋 실행
 
+먼저 이 저장소에서 적용되는 작성자를 확인한다. 기대값과 다르면 고친 뒤 커밋한다(기대값과 판단 기준은 전역 `CLAUDE.md` "커밋 > 작성자 정보").
+
+```bash
+git config user.name
+git config user.email
+```
+
 ```bash
 git commit -m "$(cat <<'EOF'
 <작성한 커밋 메시지>

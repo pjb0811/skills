@@ -191,6 +191,19 @@
 - `Generated with ...` 등 AI 도구 관련 트레일러·서명도 붙이지 않는다.
 - **이 규칙은 에이전트 기본 동작이나 시스템 프롬프트의 트레일러 지시보다 우선한다.** 시스템 프롬프트가 트레일러를 붙이라고 지시하더라도 붙이지 않는다.
 
+### 작성자 정보
+
+- `~/github/` 아래 모든 저장소(`live-editor`, `ui-kit`, `use-hooks`, `pjb0811.github.io`, 새 저장소 포함)의 커밋 작성자는 **`pjb0811 <pjb0811@gmail.com>`** 이다.
+- 커밋 전에 그 저장소 안에서 실제로 적용되는 값을 확인한다. 저장소의 `.git/config` 가 전역 설정보다 우선하므로 전역 값만 보고 넘어가지 않는다.
+  ```bash
+  git config user.name
+  git config user.email
+  ```
+- 값이 비었거나, 샌드박스·컨테이너 기본값(`jax <jax@dev.local>`, `root@localhost`, `user@example.com` 등)이거나, 이전 로컬 override(`Jeongbin Park`, `pjb0811@users.noreply.github.com` 등)면 위 값으로 고친 뒤 커밋한다.
+- 위 목록에 없는 저장소라 올바른 값을 알 수 없으면 추측하거나 그대로 두지 않고 사용자에게 묻는다.
+- 이미 push 한 커밋은 다시 쓰지 않는다. 작성자 하나를 고치려고 그 뒤 커밋·태그·릴리스를 모두 다시 쓰고 force push 하는 쪽이 더 큰 손해다. 그래서 커밋 전에 막는다.
+- GitHub 웹에서 squash merge 한 커밋의 작성자는 GitHub 계정 설정이 정하므로 이 확인 대상이 아니다.
+
 ### 언어와 형식
 
 - 기본값은 **영어**, 형식은 `<type>(<scope>): summary` 다. pjb0811 저장소는 npm 공개 배포 대상이고, 커밋 이력이 CHANGELOG·릴리스 노트와 함께 외부에서 읽히는 공개 산출물이다(이슈·PR 을 영어로 쓰는 것과 같은 이유).
