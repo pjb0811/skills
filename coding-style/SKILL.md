@@ -1,13 +1,13 @@
 ---
 name: coding-style
-description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`). Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
+description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`); (H) ordering code inside a function component or custom hook: external hooks, state and refs, derived values, handlers, effects, early returns, then the returned JSX. Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; '컴포넌트 내부 순서', '훅 순서', or whenever writing or restructuring a function component or custom hook; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
 ---
 
 # Coding Style
 
 저장소 전반에서 일관된 방식으로 코드를 다루기 위한 절차 모음. 여러 개의 독립된 하위 절차로 구성되며, 새로운 상황이 생기면 이 파일에 섹션을 추가해서 계속 확장한다.
 
-> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
+> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조·컴포넌트 내부 순서)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
 
 - **A. 기존 컨벤션 파악하고 따르기** — 코드를 작성/수정하기 전에 항상 먼저 확인
 - **B. 네이밍 컨벤션 일괄 변경** — 디렉토리/파일명 케이스 컨벤션을 바꿔야 할 때
@@ -16,6 +16,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 - **E. 조건문은 항상 중괄호 블록으로** — `if`/`else`를 새로 쓰거나 고칠 때
 - **F. 서브컴포넌트가 있는 컴포넌트의 파일 구조** — 서브컴포넌트를 가진 컴포넌트를 만들거나 정리할 때
 - **G. 문장 덩어리 사이 빈 줄** — 함수·블록 안에 문장을 새로 쓰거나 고칠 때
+- **H. 컴포넌트 내부 코드 순서** — 함수 컴포넌트·커스텀 훅을 새로 쓰거나 구조를 고칠 때
 
 ---
 
@@ -365,3 +366,75 @@ if (typeof handler !== 'function') {
 - 빈 줄은 1줄만 쓴다(2줄 이상은 Prettier 가 압축한다).
 - **한 덩어리로 읽히는 문장들은 붙여 둔다.** 모든 문장 사이에 빈 줄을 넣으면 경계 표시가 의미를 잃는다.
 - 적용 범위는 섹션 E 와 같다. 새로 쓰거나 고친 코드에만 적용하고, 손대지 않은 주변 코드는 이 규칙 때문에 diff 를 넓히지 않는다. 저장소 린트 설정과 충돌하면 저장소 설정을 따르고 사용자에게 알린다.
+
+---
+
+## H. 컴포넌트 내부 코드 순서
+
+사용자가 정한 개인 전역 규칙이다. React 공식 규칙([Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks))은 훅을 최상위에서 early return 보다 먼저 호출하라는 것만 정하고, `eslint-plugin-react` 의 `react/sort-comp` 는 클래스 컴포넌트의 메서드 순서에만 적용된다. 함수 컴포넌트 안의 순서를 정하는 표준 린트 규칙은 없으므로(2026-10 확인) 아래 순서를 기본값으로 쓴다. 저장소 린트 설정이나 스타일 문서가 다른 순서를 정했으면 그쪽을 따른다(섹션 A4).
+
+### H1. 순서
+
+1. **외부 훅** — context, router, 데이터 조회, 커스텀 훅
+2. **상태·ref** — `useState`, `useReducer`, `useRef`
+3. **파생 값** — 계산 값, `useMemo`
+4. **함수** — 이벤트 핸들러, `useCallback`
+5. **이펙트** — `useEffect`, `useLayoutEffect`
+6. **early return**
+7. **JSX 반환**
+
+그룹 사이에는 빈 줄을 한 줄 넣는다(섹션 G 의 "선언 → 그 값을 쓰는 코드" 경계).
+
+```tsx
+export function SearchPanel({ initialQuery, onSelect }: Props) {
+  const router = useRouter();
+  const { data: items = [] } = useSearchItems();
+
+  const [query, setQuery] = useState(initialQuery);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = useMemo(
+    () => items.filter((item) => item.name.includes(query)),
+    [items, query],
+  );
+
+  const handleSelect = useCallback(
+    (id: string) => {
+      onSelect(id);
+      router.push(`/items/${id}`);
+    },
+    [onSelect, router],
+  );
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  if (filtered.length === 0) {
+    return <EmptyState />;
+  }
+
+  return (
+    <SearchList
+      inputRef={inputRef}
+      items={filtered}
+      query={query}
+      onQueryChange={setQuery}
+      onSelect={handleSelect}
+    />
+  );
+}
+```
+
+### H2. 순서보다 먼저 지킬 것
+
+순서는 취향이지만 아래 둘은 동작 조건이라 순서와 충돌하면 이쪽이 우선이다.
+
+- **모든 훅 호출은 early return 보다 앞에 둔다.** Rules of Hooks 위반이며, 렌더마다 훅 호출 수가 달라져 React 가 에러를 낸다.
+- **쓰기 전에 선언한다.** 이펙트·`useMemo`·`useCallback` 의 의존성 배열은 렌더 중에 평가되므로, 거기 넣는 값과 함수는 그보다 위에 선언해야 한다(아래에 있으면 `const` 가 초기화되기 전이라 ReferenceError). 커스텀 훅이 상태를 인자로 받는 경우처럼 그룹 순서와 데이터 의존이 어긋나면, 의존하는 쪽을 뒤로 보낸다.
+
+### H 엣지 케이스
+
+- **적용 범위**: 새로 쓰거나 구조를 크게 고치는 컴포넌트에 적용한다. 손대지 않은 컴포넌트를 순서만 이유로 재정렬하지 않는다(diff 와 blame 을 흐린다). 일괄 재정렬은 사용자가 요청할 때만 하고, 동작 변경과 같은 커밋에 섞지 않는다.
+- **커스텀 훅**: 같은 순서를 쓰고, 마지막 반환이 JSX 대신 값이다.
+- **클래스 컴포넌트**: 이 절 대신 `react/sort-comp` 의 기본 순서를 따른다.
