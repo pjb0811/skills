@@ -1,13 +1,13 @@
 ---
 name: coding-style
-description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`); (H) ordering code inside a function component or custom hook: external hooks, state and refs, derived values, handlers, effects, early returns, then the returned JSX. Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; '컴포넌트 내부 순서', '훅 순서', or whenever writing or restructuring a function component or custom hook; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
+description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`); (H) ordering code inside a function component or custom hook: external hooks, state and refs, derived values, handlers, effects, early returns, then the returned JSX; (I) splitting a folder whose files have piled up flat into subfolders by screen area or user feature, not by file type (`hooks/`, `utils/`). Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; '컴포넌트 내부 순서', '훅 순서', or whenever writing or restructuring a function component or custom hook; '폴더 정리', '하위 폴더로 나눠줘', '파일이 너무 평평해', 'split this folder', or when a folder's files no longer show its structure at a glance; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
 ---
 
 # Coding Style
 
 저장소 전반에서 일관된 방식으로 코드를 다루기 위한 절차 모음. 여러 개의 독립된 하위 절차로 구성되며, 새로운 상황이 생기면 이 파일에 섹션을 추가해서 계속 확장한다.
 
-> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조·컴포넌트 내부 순서)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
+> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조·컴포넌트 내부 순서·기능 단위 하위 폴더)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
 
 - **A. 기존 컨벤션 파악하고 따르기** — 코드를 작성/수정하기 전에 항상 먼저 확인
 - **B. 네이밍 컨벤션 일괄 변경** — 디렉토리/파일명 케이스 컨벤션을 바꿔야 할 때
@@ -17,6 +17,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 - **F. 서브컴포넌트가 있는 컴포넌트의 파일 구조** — 서브컴포넌트를 가진 컴포넌트를 만들거나 정리할 때
 - **G. 문장 덩어리 사이 빈 줄** — 함수·블록 안에 문장을 새로 쓰거나 고칠 때
 - **H. 컴포넌트 내부 코드 순서** — 함수 컴포넌트·커스텀 훅을 새로 쓰거나 구조를 고칠 때
+- **I. 커진 폴더를 기능 단위 하위 폴더로 나누기** — 한 폴더에 파일이 평평하게 쌓여 구조가 안 보일 때
 
 ---
 
@@ -268,7 +269,7 @@ boolean은 쓰이는 자리에 따라 이름 짓는 방식이 다르다. React �
 
 ## F. 서브컴포넌트가 있는 컴포넌트의 파일 구조
 
-`Checkbox.Group`, `Error.Boundary`처럼 서브컴포넌트를 갖는 컴포넌트는 중첩 폴더가 아니라 **같은 depth의 형제 파일**로 두고, `index.ts`는 로직 없는 **순수 배럴**로 둔다. pjb0811/ui-kit에서 정해서(2026-07-18) live-editor 전체에 적용했고, use-hooks와 pjb0811.github.io는 서브컴포넌트가 처음 필요해질 때 이 구조를 따른다. 이 적용 현황은 환경 사실이라 낡는다 — 작업 전에 대상 저장소의 기존 서브컴포넌트 폴더를 보고 지금 상태를 확인한다(섹션 A3). 저장소에 다른 규칙이 문서로 있으면 그쪽을 따른다(섹션 A).
+`Checkbox.Group`, `Error.Boundary`처럼 서브컴포넌트를 갖는 컴포넌트는 서브컴포넌트마다 **파일 하나만 감싼 중첩 폴더**(`group/index.tsx`)를 만들지 않고 **같은 depth의 형제 파일**로 두며, `index.ts`는 로직 없는 **순수 배럴**로 둔다. 컴포넌트 폴더가 커져 여러 기능이 섞이면 기능 단위 하위 폴더로 나눈다(섹션 I) — 이 절은 그것을 막지 않는다. pjb0811/ui-kit에서 정해서(2026-07-18) live-editor 전체에 적용했고, use-hooks와 pjb0811.github.io는 서브컴포넌트가 처음 필요해질 때 이 구조를 따른다. 이 적용 현황은 환경 사실이라 낡는다 — 작업 전에 대상 저장소의 기존 서브컴포넌트 폴더를 보고 지금 상태를 확인한다(섹션 A3). 저장소에 다른 규칙이 문서로 있으면 그쪽을 따른다(섹션 A).
 
 ### F1. 구조
 
@@ -438,3 +439,46 @@ export function SearchPanel({ initialQuery, onSelect }: Props) {
 - **적용 범위**: 새로 쓰거나 구조를 크게 고치는 컴포넌트에 적용한다. 손대지 않은 컴포넌트를 순서만 이유로 재정렬하지 않는다(diff 와 blame 을 흐린다). 일괄 재정렬은 사용자가 요청할 때만 하고, 동작 변경과 같은 커밋에 섞지 않는다.
 - **커스텀 훅**: 같은 순서를 쓰고, 마지막 반환이 JSX 대신 값이다.
 - **클래스 컴포넌트**: 이 절 대신 `react/sort-comp` 의 기본 순서를 따른다.
+
+---
+
+## I. 커진 폴더를 기능 단위 하위 폴더로 나누기
+
+사용자가 정한 개인 전역 규칙이다. 한 폴더에 컴포넌트·훅·유틸·테스트가 평평하게 쌓여 한눈에 구조가 보이지 않으면, **화면 영역이나 사용자 기능 단위**로 하위 폴더를 만든다. 기술 유형(`components/`, `hooks/`, `utils/`, `types/`)으로 나누지 않는다 — 한 기능을 고칠 때 여러 폴더를 오가게 되고, 폴더 이름이 무엇을 하는 코드인지 말해 주지 않는다(FSD 가 `hooks`·`types` 같은 세그먼트명을 피하는 것과 같은 이유). 저장소에 다른 구조 규칙이 문서로 있으면 그쪽을 따른다(섹션 A).
+
+섹션 F 의 "서브컴포넌트는 형제 파일로"는 **파일 하나만 감싼 폴더**(`group/index.tsx`)를 만들지 말라는 규칙이다. 이 절의 기능 폴더는 여러 파일을 묶으므로 그 규칙과 충돌하지 않는다.
+
+### I1. 나눌 때
+
+- 폴더 안에 **서로 다른 화면 영역이나 기능이 두 개 이상** 섞여 있다. 파일 이름의 공통 접두어(`item-*`, `use-dnd-items`, `items-*`)나 서로만 import 하는 파일 묶음이 단서다.
+- 점검 신호(규칙이 아니다): 테스트를 뺀 소스 파일이 10개를 넘으면 위 조건에 해당하는지 본다. 개수만으로 나누지 않는다 — 한 기능만 있는 폴더는 커도 그대로 둔다.
+
+### I2. 나누는 기준과 이름
+
+- **하위 폴더 하나 = 화면 영역 하나 또는 사용자 기능 하나.** 그 영역의 컴포넌트와, 그 영역에서만 쓰는 훅·유틸·타입·테스트를 함께 넣는다.
+- **이름은 그 영역·기능의 이름**을 kebab-case 로 쓴다(`items/`, `fields/`, `selection/`). 폴더 안 대표 파일은 폴더명과 같은 이름으로 둔다(`items/items.tsx`, 전역 지침의 "폴더명 = 파일명 반복").
+- **테스트는 대상 파일과 같은 폴더**로 옮긴다. 여러 영역을 함께 검증하는 테스트는 부모 폴더에 남긴다.
+- **부모 폴더 루트에 남기는 것**: 진입 컴포넌트(`panel.tsx`), 공개 배럴 `index.ts`, 여러 하위 폴더가 함께 쓰는 타입·유틸.
+- **파일이 하나뿐인 영역은 폴더를 만들지 않는다**(배럴 규칙의 "단일 파일만 감싸는 폴더 금지"). 루트에 두고, 같은 영역 파일이 생기면 그때 폴더로 묶는다.
+
+### I3. import 와 배럴
+
+- 각 하위 폴더에는 `index.ts` 를 두고, **폴더 밖에서 쓰는 것만** 재export 한다. 폴더 밖 코드는 `./items` 처럼 폴더 경로로 가져온다.
+- 폴더 안 파일끼리는 자기 `index.ts` 를 거치지 않고 파일을 직접 import 한다(`./use-dnd-items`). 자기 배럴을 거치면 순환 참조가 생기기 쉽다.
+- **하위 폴더끼리의 의존은 한 방향**으로 둔다. 두 폴더가 서로를 import 하면, 함께 쓰는 부분을 부모 루트로 올린다.
+- 부모 폴더의 `index.ts` 가 공개하는 것은 바꾸지 않는다. 배치만 바뀌고 공개 API 는 그대로여야 한다.
+
+### I4. 기존 폴더를 옮길 때
+
+섹션 B 절차(`git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 import 치환, typecheck 검증)를 따르고 다음을 더한다:
+
+1. **import 관계부터 확인한다.** 파일 이름만 보고 묶지 않는다. 각 파일이 누구를 import 하고 누구에게 import 되는지 보고, 영역을 나눈 안을 사용자에게 먼저 보인다.
+2. **폴더 밖에서 하위 경로로 직접 가져오는 곳**을 찾는다(`git grep -n "<폴더 경로>/" -- src`). 테스트 파일이나 다른 컴포넌트가 `panel/children` 처럼 직접 import 하면 함께 고친다. `package.json` `exports` 에 노출된 경로면 섹션 B0 대로 breaking change 여부를 사용자에게 확인한다.
+3. **배치만 바꾸는 커밋**으로 낸다. 동작 변경·리네임·리팩터링을 섞지 않는다.
+4. typecheck/lint/test/build 를 돌리고, 부모 `index.ts` 의 공개 export 가 전과 같은지 직접 읽어 확인한다.
+
+### I 엣지 케이스
+
+- **소급해서 일괄 재배치하지 않는다.** 새로 만드는 폴더와, 사용자가 요청했거나 지금 작업으로 크게 손대는 폴더에 적용한다.
+- **어느 영역에도 딱 속하지 않는 파일**(행 단위 컨트롤 등): 쓰는 영역이 하나면 그 폴더로, 둘 이상이면 부모 루트에 둔다.
+- **FSD 프로젝트**: 슬라이스·세그먼트 구조가 우선이다. 이 절은 세그먼트(`ui/` 등) 안이 커졌을 때 그 안을 나누는 데만 쓴다.
