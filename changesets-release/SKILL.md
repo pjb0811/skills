@@ -1,6 +1,6 @@
 ---
 name: changesets-release
-description: "Common changesets release procedure shared by the pjb0811 repositories (use-hooks, ui-kit, live-editor, workbench, pjb0811.github.io): how a changeset becomes a 'Version Packages' PR and what merging it does, checking whether that merge publishes to npm before merging, approving workflow runs stuck at 'action_required' after the changeset-draft bot pushes (mergeStateStatus stays BLOCKED), the `feat` vs `feat/*` branch-name ref conflict, and running manual npm commands that need 2FA (`npm deprecate`, `dist-tag`, `owner`) through a browser approval link. Repository specifics (package path, package manager, whether npm publish runs) live in each repository's own `version-management` skill; read that too when it exists. Use when adding a changeset, merging a 'Version Packages' PR, a PR stays BLOCKED although CI looks green, or the user says '버전 올려줘', 'release 진행', 'npm 배포', '배포해줘', 'npm deprecate'."
+description: "Common changesets release procedure shared by the pjb0811 repositories (use-hooks, ui-kit, live-editor, workbench, pjb0811.github.io): how a changeset becomes a 'Version Packages' PR and what merging it does, checking whether that merge publishes to npm before merging, approving workflow runs stuck at 'action_required' after the changeset-draft bot pushes (mergeStateStatus stays BLOCKED), and the `feat` vs `feat/*` branch-name ref conflict. Repository specifics (package path, package manager, whether npm publish runs) live in each repository's own `version-management` skill; read that too when it exists. Use when adding a changeset, merging a 'Version Packages' PR, a PR stays BLOCKED although CI looks green, or the user says '버전 올려줘', 'release 진행', 'npm 배포', '배포해줘'."
 ---
 
 # Changesets Release
@@ -64,22 +64,3 @@ gh pr view <n> --json mergeable,mergeStateStatus                    # CLEAN이�
 Conventional Commits 접두어를 브랜치 이름에도 쓴다: `feat/*`, `fix/*`, `refactor/*`, `chore/*`.
 
 git은 `feat` 브랜치와 `feat/foo` 브랜치를 동시에 가질 수 없다(`refs/heads/feat`과 `refs/heads/feat/foo` 경로 충돌). 새 브랜치를 만들기 전에 `git branch -a`로 겹치는 bare 브랜치가 있는지 본다. 있으면 다른 이름을 쓰거나, 지워도 되는지 사용자에게 먼저 묻는다. 임의로 지우지 않는다.
-
-## 6. 손으로 하는 npm 작업 (2FA)
-
-정기 배포는 `publish.yml`이 OIDC로 하므로 로그인이나 OTP가 필요 없다. 이 절은 `npm deprecate`, `npm dist-tag`, `npm owner`처럼 손으로 실행하는 쓰기 작업에만 해당한다. 모두 공개 레지스트리를 바로 바꾸므로 대상 패키지·버전·메시지를 사용자에게 확인받은 뒤 실행한다.
-
-> 아래 동작은 환경 사실이다(환경 의존, 2026-10 확인: npm 11.16.0, `auth-type=web`, 계정 2FA 켜짐). 다르게 동작하면 `npm --version`, `npm config get auth-type`으로 지금 환경을 확인하고 이 절이 낡았다고 보고한다.
-
-1. **로그인 확인**: `npm whoami`가 401이면 `npm login --auth-type=web`을 실행하고, 출력된 `https://www.npmjs.com/login?next=/login/cli/...` 링크를 사용자에게 전달한다. 사용자가 브라우저에서 승인하면 CLI가 토큰을 `~/.npmrc`에 저장한다. 비밀번호나 OTP 코드를 받아서 대신 입력하지 않는다.
-2. **터미널(TTY)에서 실행한다**: 터미널이 없으면(백그라운드 실행 등) npm은 2FA 승인을 기다리지 않고 `npm error code EOTP`로 바로 끝나고, 로그의 승인 링크도 `***`로 가려진다. 가상 터미널로 실행하고 로그에서 링크를 꺼내 사용자에게 전달한다. 명령이 승인될 때까지 끝나지 않으므로 첫 줄은 백그라운드로 띄우고, 둘째 줄로 로그를 읽는다.
-   ```bash
-   script -q -f -c 'npm deprecate <package> "<message>"; echo "exit=$?"' <log-file> < /dev/null > /dev/null
-   grep -aoE 'https://www\.npmjs\.com/auth/cli/[a-f0-9-]+|exit=[0-9]+|npm error code [A-Z0-9]+' <log-file>
-   ```
-   승인은 **명령마다** 따로 필요하다. 패키지 여러 개를 처리하면 링크도 그만큼 나온다.
-3. **반영 확인**: 직후의 `npm view`는 레지스트리 캐시 때문에 이전 값을 보여줄 수 있다. 캐시를 피해서 다시 본다.
-   ```bash
-   npm view <package> deprecated --prefer-online
-   ```
-4. **되돌리기**: `npm deprecate <package> ""`(빈 메시지)로 deprecate를 해제한다.
