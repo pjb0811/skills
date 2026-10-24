@@ -121,6 +121,10 @@ gh pr create --base <default-branch> --title "<title>" --body-file <file>
 ```
 
 - 생성된 PR URL을 사용자에게 알린다.
+- 생성 직후 AI 표기 문구가 남지 않았는지 확인한다. 출력이 비어 있어야 한다. 남아 있으면 지우고 8단계의 `gh pr edit`으로 고친다.
+  ```bash
+  gh pr view <number> --json body --jq .body | grep -i -E 'generated (with|by)|co-authored-by'
+  ```
 - force push는 사용자가 요청한 경우에만 한다.
 
 ## 8. 이후 갱신
