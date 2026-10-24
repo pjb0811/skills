@@ -149,4 +149,8 @@ gh issue create --title "<title>" --body-file <file> [--label <label>] [--repo o
 ```
 
 - 생성된 이슈 URL을 사용자에게 알린다.
+- 생성 직후 AI 표기 문구가 남지 않았는지 확인한다. 출력이 비어 있어야 한다. 남아 있으면 지우고 아래 `gh issue edit`으로 고친다. 코멘트를 달았으면 코멘트도 같은 식으로 확인한다(`--json comments --jq '.comments[].body'`).
+  ```bash
+  gh issue view <n> --json body --jq .body | grep -i -E 'generated (with|by)|co-authored-by'
+  ```
 - 등록 후 내용을 고칠 때는 `gh issue edit <n> --body-file <file>`을 쓰고, 큰 변경이면 코멘트로 무엇을 바꿨는지 남긴다.
