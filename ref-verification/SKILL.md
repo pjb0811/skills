@@ -9,9 +9,9 @@ description: '저장소 상태를 확인할 때 작업 트리 대신 git ref를 
 
 > **핵심: `git fetch`가 최신이어도 작업 트리는 낡은 채로 남는다.** 원격 ref와 작업 트리는 별개로 움직인다. fetch만 했다고 안심하지 않는다.
 
-## 왜 이 문서가 있나 — 실제 사고 (2026-09-14, live-editor)
+## 왜 이 문서가 있나 — 실제 사고 (2026-09-14)
 
-한 브랜치를 검토하면서, 문서의 "에디터는 `@jbpark/ui-kit`의 `CodeEditor`를 쓴다"는 서술을 **틀렸다고 잘못 단정**했다. 근거로 든 것은 이 명령이었다.
+한 브랜치를 검토하면서, 문서의 "에디터는 공유 UI 라이브러리의 `CodeEditor`를 쓴다"는 서술을 **틀렸다고 잘못 단정**했다. 근거로 든 것은 이 명령이었다.
 
 ```bash
 $ grep -rn 'CodeEditor' src/
@@ -21,7 +21,7 @@ $ grep -rn 'CodeEditor' src/
 하지만 이건 낡은 작업 트리를 본 결과였고, 그 사이 main에는 마이그레이션 PR이 이미 들어와 있었다.
 
 ```
-582cf70  refactor: consume @jbpark/ui-kit CodeEditor instead of a local CodeMirror surface (#327)
+582cf70  refactor: consume the shared library's CodeEditor instead of a local CodeMirror surface (#327)
 ```
 
 결정적인 부분은 **fetch 데이터가 낡지 않았다는 것**이다. reflog를 보면 최신 커밋은 검토 하루 전에 이미 받아둔 상태였다.
