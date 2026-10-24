@@ -1,6 +1,6 @@
 # 전역 지침
 
-> pjb0811 저장소(`live-editor`, `ui-kit`, `use-hooks` 등) 전체에 적용하는 기본 지침이다. 정본은 `pjb0811/skills` 저장소의 `global/CLAUDE.md` 이고, `install.sh` 가 `~/.claude/CLAUDE.md` 로 링크한다.
+> pjb0811 저장소 전체에 적용하는 기본 지침이다. 정본은 `pjb0811/skills` 저장소의 `global/CLAUDE.md` 이고, `install.sh` 가 `~/.claude/CLAUDE.md` 로 링크한다.
 >
 > 이 파일은 **결정**(무엇을 쓰는지, 무엇을 하지 않는지)만 둔다. **절차**(어떤 순서로 확인하고 어떻게 채우는지)는 같은 저장소의 스킬에 있다 — `commit`, `pr`, `issue`, `coding-style`, `ref-verification`, `shared-library-first`, `changesets-release`, `publish-check`, `repo-settings`. 두 곳이 어긋나면 이 파일이 맞고 스킬을 고친다.
 
@@ -217,7 +217,7 @@
 
 ### 작성자 정보
 
-- `~/github/` 아래 모든 저장소(`live-editor`, `ui-kit`, `use-hooks`, `workbench`, `git-canvas`, `skills`, `pjb0811.github.io`, 새 저장소 포함)의 커밋 작성자는 **`pjb0811 <pjb0811@gmail.com>`** 이다.
+- `~/github/` 아래 모든 저장소(새 저장소 포함)의 커밋 작성자는 **`pjb0811 <pjb0811@gmail.com>`** 이다.
 - 커밋 전에 그 저장소 안에서 실제로 적용되는 값을 확인한다. 저장소의 `.git/config` 가 전역 설정보다 우선하므로 전역 값만 보고 넘어가지 않는다.
   ```bash
   git config user.name
@@ -225,7 +225,7 @@
   ```
 - 값이 비었거나, 샌드박스·컨테이너 기본값(`jax <jax@dev.local>`, `root@localhost`, `user@example.com` 등)이거나, 이전 로컬 override(`Jeongbin Park`, `pjb0811@users.noreply.github.com` 등)면 위 값으로 고친 뒤 커밋한다.
 - 로컬 클론 없이 GitHub API(`gh api -X PUT repos/<owner>/<repo>/contents/<path>` 등)로 커밋할 때는 `git config` 가 적용되지 않는다. 요청 본문에 `author`·`committer` 를 위 값으로 명시한다. 생략하면 인증된 GitHub 계정의 프로필 정보가 들어간다.
-- 위 목록에 없는 저장소라 올바른 값을 알 수 없으면 추측하거나 그대로 두지 않고 사용자에게 묻는다.
+- `~/github/` 밖의 저장소라 올바른 값을 알 수 없으면 추측하거나 그대로 두지 않고 사용자에게 묻는다.
 - 이미 push 한 커밋은 다시 쓰지 않는다. 작성자 하나를 고치려고 그 뒤 커밋·태그·릴리스를 모두 다시 쓰고 force push 하는 쪽이 더 큰 손해다. 그래서 커밋 전에 막는다.
 - GitHub 웹에서 squash merge 한 커밋의 작성자는 GitHub 계정 설정이 정하므로 이 확인 대상이 아니다.
 

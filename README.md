@@ -16,7 +16,7 @@ Personal [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills
 | [`shared-library-first`](shared-library-first/SKILL.md) | Building reusable UI in `ui-kit` and hooks in `use-hooks` before using them in an app |
 | [`repo-settings`](repo-settings/SKILL.md) | Checking and aligning a repository's GitHub settings: squash-only merges, auto-merge, the default-branch ruleset |
 
-Repository-specific skills stay in their repositories: `version-management` (package path, npm publish status) in each of `live-editor`, `ui-kit`, `use-hooks` and `pjb0811.github.io`, and the `component-naming` skill plus the `new-component` / `new-story` commands in `ui-kit`.
+Repository-specific skills stay in their repositories, for example `version-management`, which records a repository's package path and whether it publishes to npm.
 
 ## Install
 
@@ -33,12 +33,12 @@ git clone https://github.com/pjb0811/skills.git ~/github/skills
 
 ## Third-party skills
 
-These are used in some repositories but are maintained upstream, so they are not copied here. Install them from the source. The "Used in" column was checked on 2026-10 against each repository's `origin/main`; recheck with `git ls-tree -r --name-only origin/main .claude/skills`.
+These are used in some repositories but are maintained upstream, so they are not copied here. Install them from the source.
 
-| Skill | Source | Used in |
-| --- | --- | --- |
-| `react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | live-editor, ui-kit, use-hooks, pjb0811.github.io |
-| `composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | live-editor, ui-kit, use-hooks, pjb0811.github.io |
-| `deploy-to-vercel` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | live-editor, ui-kit, use-hooks |
-| `web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | live-editor, ui-kit, use-hooks, pjb0811.github.io |
-| `writing-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) | live-editor, ui-kit, use-hooks, pjb0811.github.io |
+| Skill | Source |
+| --- | --- |
+| `react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| `composition-patterns` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| `deploy-to-vercel` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| `web-design-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
+| `writing-guidelines` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
