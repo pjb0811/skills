@@ -2,7 +2,7 @@
 
 > pjb0811 저장소(`live-editor`, `ui-kit`, `use-hooks` 등) 전체에 적용하는 기본 지침이다. 정본은 `pjb0811/skills` 저장소의 `global/CLAUDE.md` 이고, `install.sh` 가 `~/.claude/CLAUDE.md` 로 링크한다.
 >
-> 이 파일은 **결정**(무엇을 쓰는지, 무엇을 하지 않는지)만 둔다. **절차**(어떤 순서로 확인하고 어떻게 채우는지)는 같은 저장소의 스킬에 있다 — `commit`, `pr`, `issue`, `coding-style`, `ref-verification`, `shared-library-first`, `changesets-release`, `publish-check`. 두 곳이 어긋나면 이 파일이 맞고 스킬을 고친다.
+> 이 파일은 **결정**(무엇을 쓰는지, 무엇을 하지 않는지)만 둔다. **절차**(어떤 순서로 확인하고 어떻게 채우는지)는 같은 저장소의 스킬에 있다 — `commit`, `pr`, `issue`, `coding-style`, `ref-verification`, `shared-library-first`, `changesets-release`, `publish-check`, `repo-settings`. 두 곳이 어긋나면 이 파일이 맞고 스킬을 고친다.
 
 ## 작업 진행 방식
 
@@ -116,6 +116,16 @@
 
 - 재사용할 UI 컴포넌트는 `ui-kit`(`@jbpark/ui-kit`), React 훅은 `use-hooks`(`@jbpark/use-hooks`)에 먼저 만들고, 배포한 뒤 앱 저장소에서 패키지로 가져다 쓴다. 판단 기준과 순서는 스킬 `shared-library-first`.
 - 배포는 각 저장소의 changesets 흐름을 따른다(스킬 `changesets-release`, 배포 전 점검은 `publish-check`).
+
+## 저장소 설정
+
+모든 저장소의 GitHub 설정을 하나로 맞춘다. 확인하고 고치는 절차는 스킬 `repo-settings`.
+
+- **머지**: squash 만 허용한다. 머지한 head 브랜치는 자동으로 지우고, auto-merge 를 허용한다.
+- **기본 브랜치 ruleset**: 삭제 금지, force push 금지, PR 필수(승인 0명)이고 우회 대상(bypass)은 두지 않는다. CI 가 있으면 PR 마다 도는 검사 job 을 필수 체크로 넣고, CI 가 없으면 필수 체크만 뺀다.
+- **자동 리뷰 규칙**(Copilot 코드 리뷰 등)은 켜지 않는다.
+- **auto-merge 는 PR 마다 고른다.** 머지하면 npm 에 배포되는 PR(changesets 의 Version Packages PR)에는 쓰지 않는다. 배포는 매번 사용자에게 따로 확인받는다(스킬 `changesets-release`).
+- 설정을 바꾸면 저장소에 바로 반영되므로, 무엇을 어떻게 바꿀지 사용자에게 보이고 확인받은 뒤 바꾼다.
 
 ## 코드 스타일
 

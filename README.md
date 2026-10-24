@@ -14,6 +14,7 @@ Personal [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills
 | [`changesets-release`](changesets-release/SKILL.md) | The changesets release flow, npm publish checks, approving `action_required` runs |
 | [`publish-check`](publish-check/SKILL.md) | Pre-release checks for an npm package: publish status, type check, build, version, `exports` vs entries |
 | [`shared-library-first`](shared-library-first/SKILL.md) | Building reusable UI in `ui-kit` and hooks in `use-hooks` before using them in an app |
+| [`repo-settings`](repo-settings/SKILL.md) | Checking and aligning a repository's GitHub settings: squash-only merges, auto-merge, the default-branch ruleset |
 
 Repository-specific skills stay in their repositories: `version-management` (package path, npm publish status) in each of `live-editor`, `ui-kit`, `use-hooks` and `pjb0811.github.io`, and the `component-naming` skill plus the `new-component` / `new-story` commands in `ui-kit`.
 
