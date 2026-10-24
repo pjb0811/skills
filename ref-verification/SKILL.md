@@ -45,11 +45,17 @@ $ grep -rn 'CodeEditor' src/
 
 ```bash
 git fetch origin --prune
-git status --short          # 변경사항 없는지 먼저 확인
+git branch --show-current   # 기본 브랜치(main)인지 먼저 확인
+git status --short          # 변경사항 없는지 확인
 git reset --hard origin/main    # 기본 브랜치명이 다르면 맞춰서
 ```
 
-작업 중인 변경이 있으면 `reset --hard` 대신 ref 명시 방식(2번)을 쓴다.
+`reset --hard`는 **지금 브랜치를** `origin/main` 위치로 옮긴다. 그래서 아래 두 조건을 모두 만족할 때만 쓴다.
+
+- 지금 브랜치가 기본 브랜치(`main`)다. 기능 브랜치에서 실행하면 그 브랜치가 main 위치로 옮겨져, push하지 않은 커밋이 브랜치에서 사라진다(reflog로만 되찾을 수 있다).
+- `git status --short` 출력이 비어 있다. 커밋하지 않은 변경은 되돌릴 수 없게 지워진다.
+
+둘 중 하나라도 아니면 동기화하지 않고 ref 명시 방식(2번)으로 읽거나, 명령을 실행해야 하면 임시 워크트리(4번)를 쓴다.
 
 ### 2. 내용은 ref를 명시해서 읽는다
 
@@ -102,7 +108,7 @@ git worktree remove /tmp/review --force
 ## 하지 않을 것
 
 - **낡은 기준을 피하겠다고 세션을 주기적으로 닫지 않는다.** 새 세션은 워크트리를 우연히 최신으로 잡아줄 뿐 원인을 고치지 않고, 축적된 맥락(어느 PR에서 유래한 회귀인지 등)을 잃는 비용이 크다. 위 사고도 세션 수명이 아니라 재동기화 누락이 원인이었다.
-- **`git pull`로 대충 맞추지 않는다.** 워크트리가 detached이거나 다른 브랜치면 의도와 다르게 동작한다. `fetch` + 명시적 `reset --hard origin/main`이 예측 가능하다.
+- **`git pull`로 대충 맞추지 않는다.** 워크트리가 detached이거나 다른 브랜치면 의도와 다르게 동작한다. `fetch` + 명시적 `reset --hard origin/main`(1번의 조건을 만족할 때만)이 예측 가능하다.
 - **검증 대상 브랜치를 현재 워크트리에 체크아웃하지 않는다.** 세션 워크트리의 브랜치가 바뀌면 이후 작업이 꼬인다. 임시 워크트리(4번)를 쓴다.
 
 ## 참고
