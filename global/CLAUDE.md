@@ -109,6 +109,7 @@
 
 - 스타일링 기본값은 **Tailwind CSS v4** (CSS-first). 인라인 `style` 대신 유틸리티 클래스로 작성한다.
 - 설정: `postcss.config.mjs`에 `@tailwindcss/postcss` 플러그인, 전역 CSS에 `@import "tailwindcss"` + `@theme{}` 토큰. (v4는 tailwind.config.js를 쓰지 않는다.)
+- 긴 클래스명은 `cn()` 인자를 관심사별 문자열로 나누고 마지막 인자 뒤에 `//` 를 붙인다. 정렬과 줄바꿈은 Prettier 플러그인에 맡긴다. 절차는 스킬 `coding-style` J절.
 
 > 위 두 항목은 선호이지 절대 규칙이 아니다. 프로젝트 요구·기존 관례·사용자 지시가 우선한다.
 

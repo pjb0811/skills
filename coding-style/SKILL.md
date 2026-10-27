@@ -1,13 +1,13 @@
 ---
 name: coding-style
-description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`); (H) ordering code inside a function component or custom hook: external hooks, state and refs, derived values, handlers, effects, early returns, then the returned JSX; (I) splitting a folder whose files have piled up flat into subfolders by screen area or user feature, not by file type (`hooks/`, `utils/`). Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; '컴포넌트 내부 순서', '훅 순서', or whenever writing or restructuring a function component or custom hook; '폴더 정리', '하위 폴더로 나눠줘', '파일이 너무 평평해', 'split this folder', or when a folder's files no longer show its structure at a glance; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
+description: "Repo-agnostic coding-conventions toolkit — a growing set of procedures for working consistently within any codebase. Currently covers: (A) discovering and following a project's existing directory structure and coding conventions before writing/editing code (checks CLAUDE.md/AGENTS.md, README/CONTRIBUTING, formatter/linter configs, and neighboring files); (B) safely renaming directories/files to a different naming convention (e.g. PascalCase to kebab-case) across a codebase without breaking imports or losing git history; (C) writing and rewriting code comments: lead with what the code does, keep a reason only as a present-tense constraint, and replace history with an issue number; (D) naming booleans: `is`/`has`/`can` on boolean values and state, a bare adjective on props, `isX(value)` for predicates, and no `_`/`xProp` alias for a prop that collides with its state; (E) always wrapping `if`/`else` bodies in braces, even single statements; (F) laying out a component with subcomponents as sibling files plus a pure `index.ts` barrel that attaches them with an explicit intersection-type cast; (G) putting one blank line at statement-group boundaries (after declarations, between guard clauses, before `return`); (H) ordering code inside a function component or custom hook: external hooks, state and refs, derived values, handlers, effects, early returns, then the returned JSX; (I) splitting a folder whose files have piled up flat into subfolders by screen area or user feature, not by file type (`hooks/`, `utils/`); (J) long Tailwind class lists: concern-grouped `cn()` arguments with a trailing `//`, sorting and wrapping left to Prettier plugins. Use when the user says '주석 정리', '주석 다시 써줘', 'rewrite the comments', or whenever writing a code comment; 'boolean 이름', 'is 접두사', or whenever naming a boolean value, state, prop or predicate; '서브컴포넌트 구조', '배럴 파일', 'compound component', or when adding a component with subcomponents; '컴포넌트 내부 순서', '훅 순서', or whenever writing or restructuring a function component or custom hook; '폴더 정리', '하위 폴더로 나눠줘', '파일이 너무 평평해', 'split this folder', or when a folder's files no longer show its structure at a glance; also when the user says '코딩 스타일대로', '컨벤션 맞춰줘', '이 프로젝트 스타일로', 'follow the project conventions', 'match the existing style', '케밥 케이스로 바꿔줘', '폴더명 리네임', 'rename directories to kebab-case', or before creating/editing a file in an unfamiliar repo without already having its conventions in context."
 ---
 
 # Coding Style
 
 저장소 전반에서 일관된 방식으로 코드를 다루기 위한 절차 모음. 여러 개의 독립된 하위 절차로 구성되며, 새로운 상황이 생기면 이 파일에 섹션을 추가해서 계속 확장한다.
 
-> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조·컴포넌트 내부 순서·기능 단위 하위 폴더)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
+> **이 파일의 명령어·스니펫(perl 변환식, Node 치환 정규식 등)은 예시다.** 더 나은 도구·방법이 있으면 그걸 쓴다. 바꿀 수 없는 것은 **지켜야 할 결과와 검증 기준**이다 — deepest-first 순서, `git mv` 로 히스토리 보존, 경로 세그먼트 경계를 지키는 치환, typecheck/lint/build 로 확인. 반대로 **취향 규칙**(명명·배럴·주석·boolean 이름·중괄호·빈 줄·서브컴포넌트 구조·컴포넌트 내부 순서·기능 단위 하위 폴더·긴 클래스명)은 사용자가 정한 결정이므로 "더 나은 방법"으로 대체하지 않는다.
 
 - **A. 기존 컨벤션 파악하고 따르기** — 코드를 작성/수정하기 전에 항상 먼저 확인
 - **B. 네이밍 컨벤션 일괄 변경** — 디렉토리/파일명 케이스 컨벤션을 바꿔야 할 때
@@ -18,6 +18,7 @@ description: "Repo-agnostic coding-conventions toolkit — a growing set of proc
 - **G. 문장 덩어리 사이 빈 줄** — 함수·블록 안에 문장을 새로 쓰거나 고칠 때
 - **H. 컴포넌트 내부 코드 순서** — 함수 컴포넌트·커스텀 훅을 새로 쓰거나 구조를 고칠 때
 - **I. 커진 폴더를 기능 단위 하위 폴더로 나누기** — 한 폴더에 파일이 평평하게 쌓여 구조가 안 보일 때
+- **J. 긴 클래스명** — Tailwind 클래스가 길어지거나 조건부·변형 클래스를 조합할 때
 
 ---
 
@@ -483,3 +484,84 @@ export function SearchPanel({ initialQuery, onSelect }: Props) {
 - **소급해서 일괄 재배치하지 않는다.** 새로 만드는 폴더와, 사용자가 요청했거나 지금 작업으로 크게 손대는 폴더에 적용한다.
 - **어느 영역에도 딱 속하지 않는 파일**(행 단위 컨트롤 등): 쓰는 영역이 하나면 그 폴더로, 둘 이상이면 부모 루트에 둔다.
 - **FSD 프로젝트**: 슬라이스·세그먼트 구조가 우선이다. 이 절은 세그먼트(`ui/` 등) 안이 커졌을 때 그 안을 나누는 데만 쓴다.
+
+---
+
+## J. 긴 클래스명
+
+사용자가 정한 개인 전역 규칙이다. Tailwind 유틸리티 클래스가 길어지거나 조건부·변형 클래스를 조합할 때 적용한다. 저장소 린트 설정이나 스타일 문서가 다르게 정했으면 그쪽을 따른다(섹션 A4).
+
+### J1. 정렬과 줄바꿈은 Prettier 플러그인에 맡긴다
+
+- 클래스 순서는 `prettier-plugin-tailwindcss`, 긴 클래스 문자열의 줄바꿈은 `prettier-plugin-classnames`가 맡는다. 두 플러그인을 함께 쓰려면 `prettier-plugin-merge`를 마지막에 둔다. 손으로 순서를 바꾸거나 문자열 안에서 줄을 나누지 않는다.
+- 저장소의 클래스 함수(`cn`, `cva` 등)를 두 플러그인 옵션에 등록한다. 등록하지 않으면 JSX `className` 속성 안의 문자열만 처리되고, JSX 밖의 호출(`const BASE = cn(...)`, `cva(...)`)은 정렬도 줄바꿈도 되지 않는다.
+
+  ```json
+  {
+    "tailwindFunctions": ["cn", "cva"],
+    "customFunctions": ["cn", "cva"]
+  }
+  ```
+
+- 함수 호출이 아닌 자리(변형 맵 객체의 문자열 값 등)는 어떤 옵션으로도 처리되지 않는다. J4를 따른다.
+
+### J2. `cn()` 인자를 역할별로 나눈다
+
+고정 클래스가 한 줄(`printWidth`)에 들어가지 않으면 `className` 문자열 하나로 두지 않고, `cn()`의 인자로 **관심사별 문자열**을 하나씩 둔다. 인자 순서는 아래와 같다.
+
+1. **고정 클래스**: 관심사마다 문자열 하나. 레이아웃·간격 → 테두리·모양 → 색·글꼴 → 전환·상호작용 순으로 둔다.
+2. **변형 맵 조회**: `variantClasses[variant]`, `sizeClasses[size]`
+3. **조건부 클래스**: `isActive && 'bg-blue-50 text-blue-700'`, 두 갈래면 삼항식
+4. **바깥에서 받은 `className`**: 항상 마지막. tailwind-merge 는 충돌하는 클래스 중 뒤의 것을 남기므로, 사용하는 쪽이 덮어쓸 수 있다.
+
+**마지막 인자 뒤에 `//`를 붙인다.** Prettier 는 인자가 `printWidth` 안에 들어가면 한 줄로 합치는데, 줄 주석이 있으면 인자마다 한 줄을 유지한다. 문자열 안의 순서는 J1 의 플러그인이 정렬하고, 한 문자열이 길면 그 문자열만 줄바꿈된다.
+
+```tsx
+// 지양: 관심사가 한 문자열에 섞여 있고, 짧아지면 Prettier 가 인자를 한 줄로 합친다
+<button className={cn('inline-flex items-center gap-x-2 rounded-lg border px-4 py-2 text-sm transition-colors', isActive && 'bg-blue-50', className)} />
+
+// 지향
+<button
+  className={cn(
+    'inline-flex items-center gap-x-2 px-4 py-2',
+    'rounded-lg border',
+    'text-sm',
+    'transition-colors',
+    sizeClasses[size],
+    isActive && 'bg-blue-50',
+    className, //
+  )}
+/>
+```
+
+- 고정 클래스가 한 줄에 들어가고 조건도 없으면 `className="..."` 문자열 하나로 둔다.
+- JSX 밖에서 정의하는 상수도 같은 방식으로 쓴다(`const BUTTON_BASE = cn(..., //)`).
+
+### J3. 반복되는 조합과 변형
+
+- 같은 조합이 두 곳 이상에 나오면 상수로 뺀다(`const BUTTON_BASE = cn(...)`).
+- `variant`, `size` 같은 변형 축은 `Record<Variant, string>` 변형 맵으로 둔다. 축이 여러 개이고 축끼리의 조합 규칙이 있으면 `cva`를 쓴다. 저장소가 이미 쓰는 방식이 있으면 그것을 따른다(섹션 A3).
+
+### J4. 변형 맵 값은 짧게 둔다
+
+변형 맵의 값은 J1 의 도구가 정렬하지도 줄바꿈하지도 않는다. 값은 한 줄에 들어가게 두고, 길어지면 값을 `cn()`으로 감싸 J1·J2 가 적용되게 한다.
+
+```ts
+const variantClasses: Record<Variant, string> = {
+  primary: cn(
+    'bg-blue-600 text-white',
+    'hover:bg-blue-700 focus-visible:outline-blue-600', //
+  ),
+  ghost: 'bg-transparent text-gray-700',
+};
+```
+
+### J5. 클래스명을 문자열 조각으로 만들지 않는다
+
+`` `bg-${color}-500` ``처럼 클래스명을 조각으로 조합하지 않는다. Tailwind 는 소스 코드에서 완성된 클래스명만 찾아 CSS 를 만들므로, 조합한 클래스는 스타일이 생성되지 않는다. 가능한 값을 모두 완성된 클래스명으로 적은 맵을 쓴다(`{ blue: 'bg-blue-500', red: 'bg-red-500' }`).
+
+### J 엣지 케이스
+
+- **적용 범위**: 새로 쓰거나 고치는 코드에 적용한다. 기존 코드에 `//`를 붙이거나 인자를 나누려고 일괄 변경하지 않는다. 일괄 정리는 사용자가 요청할 때만 하고, 동작 변경과 같은 커밋에 섞지 않는다.
+- **플러그인이나 옵션이 없는 저장소**: J1 설정을 저장소에 추가할지 사용자에게 제안한다. 추가하면 기존 파일이 다시 포맷될 수 있으므로, `prettier --list-different`로 바뀌는 파일을 먼저 세어 함께 알린다.
+- **`cn`이 없는 저장소**: 이 절을 위해 새로 만들지 않는다. 조건부·변형 클래스가 필요해질 때 저장소 관례(`clsx` 등)를 따르고, 없으면 사용자에게 묻는다.
