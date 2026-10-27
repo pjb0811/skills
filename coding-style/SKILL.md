@@ -495,9 +495,11 @@ export function SearchPanel({ initialQuery, onSelect }: Props) {
 
 - 클래스 순서는 `prettier-plugin-tailwindcss`, 긴 클래스 문자열의 줄바꿈은 `prettier-plugin-classnames`가 맡는다. 두 플러그인을 함께 쓰려면 `prettier-plugin-merge`를 마지막에 둔다. 손으로 순서를 바꾸거나 문자열 안에서 줄을 나누지 않는다.
 - 저장소의 클래스 함수(`cn`, `cva` 등)를 두 플러그인 옵션에 등록한다. 등록하지 않으면 JSX `className` 속성 안의 문자열만 처리되고, JSX 밖의 호출(`const BASE = cn(...)`, `cva(...)`)은 정렬도 줄바꿈도 되지 않는다.
+- Tailwind v4 에서는 `tailwindStylesheet`에 CSS 진입 파일(`@import "tailwindcss"`와 `@theme`이 있는 파일)을 지정한다. 지정하지 않으면 플러그인이 테마 토큰 클래스(`text-foreground`, `bg-destructive` 등)를 모르는 클래스로 보고 맨 앞으로 보낸다. 경로는 Prettier 설정 파일 기준이다.
 
   ```json
   {
+    "tailwindStylesheet": "./src/globals.css",
     "tailwindFunctions": ["cn", "cva"],
     "customFunctions": ["cn", "cva"]
   }
@@ -563,5 +565,5 @@ const variantClasses: Record<Variant, string> = {
 ### J 엣지 케이스
 
 - **적용 범위**: 새로 쓰거나 고치는 코드에 적용한다. 기존 코드에 `//`를 붙이거나 인자를 나누려고 일괄 변경하지 않는다. 일괄 정리는 사용자가 요청할 때만 하고, 동작 변경과 같은 커밋에 섞지 않는다.
-- **플러그인이나 옵션이 없는 저장소**: J1 설정을 저장소에 추가할지 사용자에게 제안한다. 추가하면 기존 파일이 다시 포맷될 수 있으므로, `prettier --list-different`로 바뀌는 파일을 먼저 세어 함께 알린다.
+- **플러그인이나 옵션이 없는 저장소**: J1 설정을 저장소에 추가할지 사용자에게 제안한다. 추가하면 기존 파일이 다시 포맷될 수 있으므로, `prettier --list-different`로 바뀌는 파일을 먼저 세어 함께 알린다. 특히 `tailwindStylesheet`를 처음 지정하면 테마 토큰이 들어간 클래스 전체가 다시 정렬되어 diff 가 커진다. 설정 추가와 전체 재포맷은 다른 변경과 섞지 않고 별도 PR 로 낸다.
 - **`cn`이 없는 저장소**: 이 절을 위해 새로 만들지 않는다. 조건부·변형 클래스가 필요해질 때 저장소 관례(`clsx` 등)를 따르고, 없으면 사용자에게 묻는다.
