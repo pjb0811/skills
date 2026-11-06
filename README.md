@@ -10,7 +10,7 @@ Personal [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills
 | [`pr`](pr/SKILL.md) | Writing and opening a pull request (Summary / Changes / How to test) |
 | [`issue`](issue/SKILL.md) | Filing a GitHub issue that follows the repository's templates |
 | [`ref-verification`](ref-verification/SKILL.md) | Reading repository state from git refs instead of a possibly stale worktree |
-| [`coding-style`](coding-style/SKILL.md) | Following a repository's conventions, bulk renames, comments, boolean names, braces, subcomponent file layout, blank lines, order of code inside a component, feature subfolders |
+| [`coding-style`](coding-style/SKILL.md) | Following a repository's conventions, bulk renames, comments, boolean names, braces, subcomponent file layout, blank lines, order of code inside a component, feature subfolders, long class lists |
 | [`changesets-release`](changesets-release/SKILL.md) | The changesets release flow, npm publish checks, approving `action_required` runs |
 | [`publish-check`](publish-check/SKILL.md) | Pre-release checks for an npm package: publish status, type check, build, version, `exports` vs entries |
 | [`shared-library-first`](shared-library-first/SKILL.md) | Building reusable UI in `ui-kit` and hooks in `use-hooks` before using them in an app |
